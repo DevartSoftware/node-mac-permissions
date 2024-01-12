@@ -1,7 +1,7 @@
 // Type definitions for node-mac-permissions
 // Project: node-mac-permissions
 
-export function askForAccessibilityAccess(): undefined
+export function askForAccessibilityAccess(openPreferences?: boolean): undefined
 export function askForCalendarAccess(): Promise<Omit<PermissionType, 'restricted'>>
 export function askForCameraAccess(): Promise<PermissionType>
 export function askForContactsAccess(): Promise<Omit<PermissionType, 'restricted'>>

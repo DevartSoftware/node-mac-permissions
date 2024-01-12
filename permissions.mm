@@ -822,10 +822,12 @@ void AskForScreenCaptureAccess(const Napi::CallbackInfo &info) {
 
 // Request Accessibility Access.
 void AskForAccessibilityAccess(const Napi::CallbackInfo &info) {
-  NSDictionary *options = @{(id)kAXTrustedCheckOptionPrompt : @(NO)};
+  bool should_force_prefs = info[0].As<Napi::Boolean>().Value();
+
+  NSDictionary *options = @{(id)kAXTrustedCheckOptionPrompt : (should_force_prefs ? @(NO) : @(YES))};
   bool trusted = AXIsProcessTrustedWithOptions((CFDictionaryRef)options);
 
-  if (!trusted) {
+  if (!trusted && should_force_prefs) {
     OpenPrefPane("Privacy_Accessibility");
   }
 }
