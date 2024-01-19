@@ -794,7 +794,7 @@ Napi::Promise AskForMusicLibraryAccess(const Napi::CallbackInfo &info) {
 // Request Screen Capture Access.
 void AskForScreenCaptureAccess(const Napi::CallbackInfo &info) {
   if (@available(macOS 11.0, *)) {
-    if (CGPreflightScreenCaptureAccess())
+    if (CGPreflightScreenCaptureAccess() || CGRequestScreenCaptureAccess())
       return;
 
     bool should_force_prefs = info[0].As<Napi::Boolean>().Value();
