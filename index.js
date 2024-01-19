@@ -1,5 +1,4 @@
-const os = require('os')
-const permissions = os.platform() === 'darwin' ? require('bindings')('permissions.node') : undefined
+const permissions = require('bindings')('permissions.node')
 
 function getAuthStatus(type) {
   const validTypes = [
