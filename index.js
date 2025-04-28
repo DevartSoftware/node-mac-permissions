@@ -3,6 +3,7 @@ const permissions = require('bindings')('permissions.node')
 function getAuthStatus(type) {
   const validTypes = [
     'accessibility',
+    'apple-events',
     'bluetooth',
     'calendar',
     'camera',
@@ -26,6 +27,14 @@ function getAuthStatus(type) {
   return permissions.getAuthStatus.call(this, type)
 }
 
+function askForAccessibilityAccess(openPreferences = false) {
+  if (typeof openPreferences !== 'boolean') {
+    throw new TypeError('openPreferences must be a boolean')
+  }
+
+  return permissions.askForAccessibilityAccess.call(this, openPreferences)
+}
+
 function askForFoldersAccess(folder) {
   const validFolders = ['desktop', 'documents', 'downloads']
 
@@ -36,12 +45,20 @@ function askForFoldersAccess(folder) {
   return permissions.askForFoldersAccess.call(this, folder)
 }
 
-function askForAccessibilityAccess(openPreferences = false) {
-  if (typeof openPreferences !== 'boolean') {
-    throw new TypeError('openPreferences must be a boolean')
+function askForCalendarAccess(accessLevel = 'write-only') {
+  if (!['write-only', 'full'].includes(accessLevel)) {
+    throw new TypeError(`${accessLevel} must be one of either 'write-only' or 'full'`)
   }
 
-  return permissions.askForAccessibilityAccess.call(this, openPreferences)
+  return permissions.askForCalendarAccess.call(this, accessLevel)
+}
+
+function askForLocationAccess(accessLevel = 'when-in-use') {
+  if (!['when-in-use', 'always'].includes(accessLevel)) {
+    throw new TypeError(`${accessLevel} must be one of either 'when-in-use' or 'always'`)
+  }
+
+  return permissions.askForLocationAccess.call(this, accessLevel)
 }
 
 function askForScreenCaptureAccess(openPreferences = false) {
@@ -68,9 +85,23 @@ function askForInputMonitoringAccess(accessLevel = 'listen') {
   return permissions.askForInputMonitoringAccess.call(this, accessLevel)
 }
 
+function askForAppleEventsAccess(targetAppBundleId, shouldPrompt = true) {
+  if (typeof targetAppBundleId !== 'string') {
+    throw new TypeError('targetAppBundleId must be a string')
+  }
+
+  if (typeof shouldPrompt !== 'boolean') {
+    throw new TypeError('shouldPrompt must be a boolean')
+  }
+
+  return permissions.askForAppleEventsAccess.call(this, targetAppBundleId, shouldPrompt)
+}
+
 module.exports = {
-  askForAccessibilityAccess,
-  askForCalendarAccess: permissions.askForCalendarAccess,
+  askForAppleEventsAccess: askForAppleEventsAccess,
+  askForAccessibilityAccess: askForAccessibilityAccess,
+  askForCalendarAccess: askForCalendarAccess,
+  askForLocationAccess: askForLocationAccess,
   askForCameraAccess: permissions.askForCameraAccess,
   askForContactsAccess: permissions.askForContactsAccess,
   askForFoldersAccess,

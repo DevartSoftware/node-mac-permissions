@@ -1,10 +1,12 @@
 const { expect } = require('chai')
 const {
   askForFoldersAccess,
+  askForCalendarAccess,
   getAuthStatus,
   askForPhotosAccess,
   askForScreenCaptureAccess,
   askForInputMonitoringAccess,
+  askForLocationAccess,
 } = require('../index')
 
 describe('node-mac-permissions', () => {
@@ -50,6 +52,14 @@ describe('node-mac-permissions', () => {
     })
   })
 
+  describe('askForCalendarAccess([accessLevel])', () => {
+    it('should throw on invalid accessLevel', () => {
+      expect(() => {
+        askForCalendarAccess('bad-type')
+      }).to.throw(/bad-type must be one of either 'write-only' or 'full'/)
+    })
+  })
+
   describe('askForInputMonitoringAccess()', () => {
     it('should throw on invalid types', () => {
       expect(() => {
@@ -71,6 +81,14 @@ describe('node-mac-permissions', () => {
       expect(() => {
         askForScreenCaptureAccess('bad-type')
       }).to.throw(/openPreferences must be a boolean/)
+    })
+  })
+
+  describe('askForLocationAccess()', () => {
+    it('should throw on invalid accessLevel type', () => {
+      expect(() => {
+        askForLocationAccess('bad-type')
+      }).to.throw(/bad-type must be one of either 'when-in-use' or 'always'/)
     })
   })
 })
